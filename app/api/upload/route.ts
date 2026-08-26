@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
       if (file.size > MAX_FILE_SIZE) return NextResponse.json({ error: "Files must be 25 MB or smaller" }, { status: 413 });
       const type = classifyUpload(file.name, file.type || "application/octet-stream");
       if (!type) return NextResponse.json({ error: "This file type is not supported" }, { status: 415 });
-      storedFileId = await saveToGridFs(Buffer.from(await file.arrayBuffer()), file.name, file.type || "application/octet-stream");
+      storedFileId = await saveToGridFs(file.stream(), file.name, file.type || "application/octet-stream");
       entry = { type, fileName: file.name, fileSize: file.size, mimeType: file.type || "application/octet-stream", fileId: storedFileId, expiresAt, burnAfterDownload };
     }
 

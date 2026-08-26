@@ -36,13 +36,16 @@ export async function getBucket() {
   return new mongoose.mongo.GridFSBucket(connection.connection.db, { bucketName: "CloudSend" });
 }
 
-export async function saveToGridFs(data: Buffer, fileName: string, mimeType: string) {
+export async function saveToGridFs(stream: ReadableStream<Uint8Array>, fileName: string, mimeType: string) {
   const bucket = await getBucket();
   return new Promise<GridFsObjectId>((resolve, reject) => {
-    const upload = bucket.openUploadStream(fileName, { contentType: mimeType });
+    const upload = bucket.openUploadStream(fileName, { 
+      contentType: mimeType, 
+      chunkSizeBytes: 1048576 
+    });
     upload.once("error", reject);
     upload.once("finish", () => resolve(upload.id));
-    upload.end(data);
+    Readable.fromWeb(stream as any).pipe(upload);
   });
 }
 

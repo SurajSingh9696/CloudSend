@@ -195,7 +195,7 @@ export default function Home() {
             <h1 className="display-serif text-3xl font-semibold leading-none tracking-tight">CloudSend</h1>
           </div>
         </div>
-        <p className="max-w-xs text-right text-[11px] leading-relaxed text-ink/60">No accounts. No inboxes. Just a sealed item and a six-digit ledger reference.</p>
+        <p className="max-w-xs text-left sm:text-right text-[11px] leading-relaxed text-ink/60">No accounts. No inboxes. Just a sealed item and a six-digit ledger reference.</p>
       </header>
 
       <nav aria-label="Share actions" className="mx-auto mb-9 flex w-full max-w-md border-b border-ink/20">
@@ -215,7 +215,7 @@ export default function Home() {
 
       {tab === "upload" ? (
         <section className="mx-auto max-w-3xl">
-          <div className="mb-6 flex items-end justify-between gap-4">
+          <div className="mb-6 flex flex-col items-start gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="text-[10px] font-bold uppercase tracking-[.2em] text-rust">New entry · 01</p>
               <h2 className="display-serif mt-1 text-3xl">Seal something for later.</h2>
@@ -349,7 +349,7 @@ export default function Home() {
           <aside className="mt-7 flex items-start gap-3 border-l-2 border-rust/60 bg-[#f8eee5]/60 px-4 py-3 text-[11px] leading-relaxed text-ink/65"><Info className="mt-0.5 h-4 w-4 shrink-0 text-rust" />Only someone holding the exact reference can retrieve this item. All entries are permanently removed after 24 hours or when burned.</aside>
         </section>
       )}
-      <footer className="mt-14 flex items-center justify-between border-t border-ink/15 pt-4 text-[9px] font-bold uppercase tracking-[.18em] text-ink/45"><span>CloudSend registry</span><span>Private · ephemeral · direct</span></footer>
+      <footer className="mt-14 flex flex-col items-center gap-3 border-t border-ink/15 pt-4 text-center text-[9px] font-bold uppercase tracking-[.18em] text-ink/45 sm:flex-row sm:justify-between sm:text-left"><span>CloudSend registry</span><span>Private · ephemeral · direct</span></footer>
     </main>
   );
 }
