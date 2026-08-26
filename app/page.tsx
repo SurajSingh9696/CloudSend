@@ -37,12 +37,6 @@ type ShareInfo = {
 };
 
 const MAX_SIZE = 25 * 1024 * 1024;
-const EXPIRY_LABELS: Record<string, string> = {
-  "3600": "1 hour",
-  "86400": "24 hours",
-  "604800": "7 days",
-  never: "Never",
-};
 
 function classifyFile(file: File): ShareKind | null {
   const type = file.type.toLowerCase();
@@ -85,7 +79,6 @@ export default function Home() {
   const [mode, setMode] = useState<"file" | "text">("file");
   const [file, setFile] = useState<File | null>(null);
   const [text, setText] = useState("");
-  const [expiry, setExpiry] = useState("86400");
   const [burnAfterDownload, setBurnAfterDownload] = useState(false);
   const [dragging, setDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -129,7 +122,6 @@ export default function Home() {
     try {
       const payload = new FormData();
       payload.set("mode", mode);
-      payload.set("expiresIn", expiry);
       payload.set("burnAfterDownload", String(burnAfterDownload));
       if (mode === "file" && file) payload.set("file", file);
       if (mode === "text") payload.set("textContent", text);
@@ -274,12 +266,12 @@ export default function Home() {
 
           <div className="paper-card mt-5 p-5 sm:p-6">
             <div className="relative z-10 grid gap-5 sm:grid-cols-[1fr_auto] sm:items-end">
-              <label className="block">
+              <div className="block">
                 <span className="mb-2 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[.16em] text-ink/60"><Clock3 className="h-3.5 w-3.5" /> Retention period</span>
-                <select value={expiry} onChange={(event) => setExpiry(event.target.value)} className="w-full appearance-none rounded-none border border-ink/25 bg-paper-light px-3 py-3 text-xs font-bold outline-none focus:border-ledger-green sm:w-56">
-                  {Object.entries(EXPIRY_LABELS).map(([value, label]) => <option value={value} key={value}>{label}</option>)}
-                </select>
-              </label>
+                <div className="w-full rounded-none border border-ink/25 bg-[#eee8da]/50 px-3 py-3 text-xs font-bold text-ink/70 sm:w-56">
+                  24 hours (Fixed)
+                </div>
+              </div>
               <label className="flex cursor-pointer items-center gap-3 border-t border-ink/15 pt-4 text-xs sm:border-t-0 sm:pt-0">
                 <input type="checkbox" checked={burnAfterDownload} onChange={(event) => setBurnAfterDownload(event.target.checked)} className="h-4 w-4 accent-[#1f3b2d]" />
                 <span><span className="block font-bold">Burn after retrieval</span><span className="text-[10px] text-ink/55">Remove it after the first download</span></span>
@@ -297,7 +289,7 @@ export default function Home() {
                 <strong className="display-serif text-5xl font-bold tracking-[.13em] sm:text-6xl">{createdCode}</strong>
                 <button type="button" onClick={() => copy(createdCode, "Code copied to clipboard")} aria-label="Copy code" className="rounded-full p-2 hover:bg-rust/10"><Copy className="h-5 w-5" /></button>
               </div>
-              <p className="relative z-10 text-[10px] uppercase tracking-wider">Keep this reference private · expires in {EXPIRY_LABELS[expiry].toLowerCase()}</p>
+              <p className="relative z-10 text-[10px] uppercase tracking-wider">Keep this reference private · expires in 24 hours</p>
             </div>
           )}
         </section>
@@ -354,7 +346,7 @@ export default function Home() {
               )}
             </div>
           )}
-          <aside className="mt-7 flex items-start gap-3 border-l-2 border-rust/60 bg-[#f8eee5]/60 px-4 py-3 text-[11px] leading-relaxed text-ink/65"><Info className="mt-0.5 h-4 w-4 shrink-0 text-rust" />Only someone holding the exact reference can retrieve this item. Expired and burned entries are permanently removed.</aside>
+          <aside className="mt-7 flex items-start gap-3 border-l-2 border-rust/60 bg-[#f8eee5]/60 px-4 py-3 text-[11px] leading-relaxed text-ink/65"><Info className="mt-0.5 h-4 w-4 shrink-0 text-rust" />Only someone holding the exact reference can retrieve this item. All entries are permanently removed after 24 hours or when burned.</aside>
         </section>
       )}
       <footer className="mt-14 flex items-center justify-between border-t border-ink/15 pt-4 text-[9px] font-bold uppercase tracking-[.18em] text-ink/45"><span>CloudSend registry</span><span>Private · ephemeral · direct</span></footer>

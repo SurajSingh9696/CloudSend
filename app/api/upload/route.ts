@@ -5,20 +5,12 @@ import { connectToDatabase } from "@/lib/mongodb";
 
 export const runtime = "nodejs";
 
-function parseExpiresIn(raw: FormDataEntryValue | null) {
-  if (raw === "never") return undefined;
-  const seconds = Number(raw);
-  if (![3600, 86400, 604800].includes(seconds)) return null;
-  return new Date(Date.now() + seconds * 1000);
-}
-
 export async function POST(request: NextRequest) {
   try {
     const form = await request.formData();
     const mode = form.get("mode");
-    const expiresAt = parseExpiresIn(form.get("expiresIn"));
+    const expiresAt = new Date(Date.now() + 86400 * 1000); // Fixed 24 hours
     const burnAfterDownload = form.get("burnAfterDownload") === "true";
-    if (expiresAt === null) return NextResponse.json({ error: "Invalid retention period" }, { status: 400 });
 
     await connectToDatabase();
     await ShareModel.init();

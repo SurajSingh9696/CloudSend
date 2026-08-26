@@ -1,6 +1,5 @@
-<!-- draft: verify this claim (path to logo) -->
 <div align="center">
-  <img src="/logo.svg" width="150" alt="CloudSend Logo" />
+  <img src="./logo.png" width="150" alt="CloudSend Logo" />
 
 You need to quickly share a sensitive file or private note. Then you are forced to create an account, verify your email, deal with tracking links, or permanently clutter up an inbox.
 
